@@ -57,28 +57,21 @@ scene.add(ambientLight);
 
 camera.position.set(0, 1.5, 5);
 
-const assetSpawner = new AssetSpawner(scene);
-
 const movement = new Movement(cubeBody);
-
-const loader = new GLTFLoader();
-loader.load('https://cdn.glitch.global/9840aa6a-2e73-4088-b83c-d68a4642d7be/low_poly_game_level.glb?v=1727015272543', function (gltf) {
-  gltf.scene.scale.set(1, 1, 1);
-  gltf.scene.position.set(0, 0, 0);
-  scene.add(gltf.scene);
-});
+const assetSpawner = new AssetSpawner(scene, world);
 
 function animate() {
   requestAnimationFrame(animate);
   world.step(1 / 60);
-  
+  cubeBody.angularVelocity.set(0, 0, 0);
+  // Handle movement
+  movement.handleMovement();
+
+  // Update cube position and rotation
   cube.position.copy(cubeBody.position);
   cube.quaternion.copy(cubeBody.quaternion);
 
-  // Reset angular velocity to prevent rolling
-  cubeBody.angularVelocity.set(0, 0, 0);
-
-  movement.handleMovement();
+  // Render the scene
   renderer.render(scene, camera);
 }
 
