@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import * as CANNON from 'cannon-es';
 
-// Initialize Three.js scene
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
@@ -12,61 +11,79 @@ document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
-// Initialize Cannon.js physics world
 const world = new CANNON.World();
-world.gravity.set(0, -9.82, 0); // Set gravity in m/s²
+world.gravity.set(0, -9.82, 0);
 
-// Create ground in Cannon.js
 const groundBody = new CANNON.Body({
-  mass: 0, // Static ground (mass = 0 means it won't move)
-  shape: new CANNON.Plane(),
+  mass: 0,
+  shape: new CANNON.Box(new CANNON.Vec3(2.5, 0.25, 5)),
+  position: new CANNON.Vec3(0, -2, 0),
 });
-groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0); // Rotate to make it horizontal
 world.addBody(groundBody);
 
-// Create ground in Three.js
-const groundGeometry = new THREE.PlaneGeometry(50, 50);
-const groundMaterial = new THREE.MeshStandardMaterial({ color: '#808080' });
+const groundGeometry = new THREE.BoxGeometry(5, 0.5, 10);
+const groundMaterial = new THREE.MeshStandardMaterial({ color: '#0000ff' });
 const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-ground.rotation.x = -Math.PI / 2; // Rotate to make it horizontal
+ground.position.set(0, -2, 0);
 ground.receiveShadow = true;
 scene.add(ground);
 
-// Create a dynamic cube in Cannon.js
 const cubeBody = new CANNON.Body({
-  mass: 1, // Set mass to give it gravity
-  shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)), // Box shape
-  position: new CANNON.Vec3(0, 0, 0), // Initial position
+  mass: 1,
+  shape: new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5)),
+  position: new CANNON.Vec3(0, 0, 0),
 });
 world.addBody(cubeBody);
 
-// Create a dynamic cube in Three.js
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 const cubeMaterial = new THREE.MeshStandardMaterial({ color: '#00ff00' });
 const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 cube.castShadow = true;
 scene.add(cube);
 
-// Lighting
 const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(5, 10, 5);
+light.position.set(5, 20, 5);
 light.castShadow = true;
 scene.add(light);
 
-// Animation loop
+camera.position.z = 5;
+
+const keys = {
+  a: { pressed: false },
+  d: { pressed: false },
+};
+
+window.addEventListener('keydown', (event) => {
+  switch (event.code) {
+    case 'KeyA':
+      keys.a.pressed = true;
+      break;
+    case 'KeyD':
+      keys.d.pressed = true;
+      break;
+    case 'KeyW':
+      console.log('W');
+      break;
+  }
+});
+
+window.addEventListener('keyup', (event) => {
+  switch (event.code) {
+    case 'KeyA':
+      keys.a.pressed = false;
+      break;
+    case 'KeyD':
+      keys.d.pressed = false;
+      break;
+  }
+});
+
 function animate() {
   requestAnimationFrame(animate);
-
-  // Step the physics world
-  world.step(1 / 60); // 60 fps
-
-  // Copy coordinates from Cannon.js to Three.js
+  world.step(1 / 60);
   cube.position.copy(cubeBody.position);
   cube.quaternion.copy(cubeBody.quaternion);
-
   renderer.render(scene, camera);
 }
 
-camera.position.z = 10;
 animate();
-
