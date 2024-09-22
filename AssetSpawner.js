@@ -10,7 +10,7 @@ export class AssetSpawner {
     this.assets = [
       {
         url: 'https://cdn.glitch.global/9840aa6a-2e73-4088-b83c-d68a4642d7be/low_poly_game_level.glb?v=1727015272543',
-        scale: { x: 5, y: 5, z: 5 },
+        scale: { x: 2, y: 2, z: 2 },
         position: { x: 0, y: 0, z: 0 }
       },
       // Add more assets here
@@ -40,7 +40,7 @@ export class AssetSpawner {
         floorBody.addShape(floorShape);
         
         // Position the floor body
-        floorBody.position.set(-4,-4,-4);
+        floorBody.position.set(-1,-1,-1);
         this.world.addBody(floorBody); // Add the body to the Cannon world
         
       }, undefined, (error) => {

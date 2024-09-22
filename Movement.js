@@ -49,7 +49,7 @@ export class Movement {
   }
 
   handleMovement() {
-    const moveSpeed = 5;
+    const moveSpeed = 20;
     const velocity = this.cubeBody.velocity;
 
     if (this.keys.a.pressed) {

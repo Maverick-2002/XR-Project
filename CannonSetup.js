@@ -59,17 +59,23 @@ camera.position.set(0, 1.5, 5);
 
 const movement = new Movement(cubeBody);
 const assetSpawner = new AssetSpawner(scene, world);
+const cameraOffset = new THREE.Vector3(0, 1.5, 5); // Adjust this for desired offset
 
 function animate() {
   requestAnimationFrame(animate);
   world.step(1 / 60);
   cubeBody.angularVelocity.set(0, 0, 0);
+  
   // Handle movement
   movement.handleMovement();
 
   // Update cube position and rotation
   cube.position.copy(cubeBody.position);
   cube.quaternion.copy(cubeBody.quaternion);
+
+  // Update camera position to follow the cube
+  camera.position.copy(cube.position).add(cameraOffset);
+  camera.lookAt(cube.position); // Make the camera look at the cube
 
   // Render the scene
   renderer.render(scene, camera);
