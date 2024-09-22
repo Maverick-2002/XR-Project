@@ -18,19 +18,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 const world = new CANNON.World();
 world.gravity.set(0, -9.82, 0);
 
-const groundBody = new CANNON.Body({
-  mass: 0,
-  shape: new CANNON.Box(new CANNON.Vec3(2.5, 0.25, 5)),
-  position: new CANNON.Vec3(0, 0, 0),
-});
-world.addBody(groundBody);
 
-const groundGeometry = new THREE.BoxGeometry(5, 0.5, 10);
-const groundMaterial = new THREE.MeshStandardMaterial({ color: '#0000ff' });
-const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-ground.position.set(0, 0, 0);
-ground.receiveShadow = true;
-scene.add(ground);
 
 const cubeBody = new CANNON.Body({
   mass: 1,
