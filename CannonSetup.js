@@ -4,6 +4,7 @@ import * as CANNON from 'cannon-es';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Movement } from './Movement.js';
 import { AssetSpawner } from './AssetSpawner.js';
+import { CameraCoordinates } from './CameraCoordinates.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -60,6 +61,7 @@ camera.position.set(0, 1.5, 5);
 const movement = new Movement(cubeBody);
 const assetSpawner = new AssetSpawner(scene, world);
 const cameraOffset = new THREE.Vector3(0, 1.5, 5); // Adjust this for desired offset
+const cameraCoordinates = new CameraCoordinates(camera);
 
 function animate() {
   requestAnimationFrame(animate);
@@ -79,6 +81,7 @@ function animate() {
 
   // Render the scene
   renderer.render(scene, camera);
+  cameraCoordinates.update();
 }
 
 animate();
