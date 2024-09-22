@@ -29,7 +29,7 @@ export class AssetSpawner {
         // Create a bounding box for the model
         const box = new THREE.Box3().setFromObject(model);
         
-        // Get dimensions
+        // Get dimensions of the loaded asset
         const size = new THREE.Vector3();
         box.getSize(size);
         console.log('Width:', size.x, 'Height:', size.y, 'Depth:', size.z);
@@ -39,13 +39,45 @@ export class AssetSpawner {
         const floorShape = new CANNON.Box(new CANNON.Vec3(size.x / 2, 0.1, size.z / 2)); // Adjust shape size as necessary
         floorBody.addShape(floorShape);
         
-        // Position the floor body
+        // Position the floor body below the asset
         floorBody.position.set(-1,-1,-1);
         this.world.addBody(floorBody); // Add the body to the Cannon world
-        
+
+        // Create boundaries around the asset based on its size
+        this.createBoundaries(size, asset.position);
+
       }, undefined, (error) => {
         console.error('Error loading asset:', error);
       });
+    });
+  }
+
+  createBoundaries(size, position) {
+    const boundaryThickness = 0.1; // Thickness of the walls
+    const boundaryHeight = size.y; // Height of the boundary (can be adjusted)
+
+    // Boundaries are placed around the asset
+    const boundaries = [
+      { position: new THREE.Vector3(position.x, position.y, position.z - size.z / 2 - boundaryThickness / 2), scale: [size.x, boundaryHeight, boundaryThickness] }, // Back wall
+      { position: new THREE.Vector3(position.x, position.y, position.z + size.z / 2 + boundaryThickness / 2), scale: [size.x, boundaryHeight, boundaryThickness] }, // Front wall
+      { position: new THREE.Vector3(position.x - size.x / 2 - boundaryThickness / 2, position.y, position.z), scale: [boundaryThickness, boundaryHeight, size.z] }, // Left wall
+      { position: new THREE.Vector3(position.x + size.x / 2 + boundaryThickness / 2, position.y, position.z), scale: [boundaryThickness, boundaryHeight, size.z] }  // Right wall
+    ];
+
+    boundaries.forEach(boundary => {
+      // Create Three.js mesh for visualization (optional, can be made invisible)
+      const boundaryGeometry = new THREE.BoxGeometry(...boundary.scale);
+      const boundaryMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, wireframe: true }); // Red for visualization
+      const boundaryMesh = new THREE.Mesh(boundaryGeometry, boundaryMaterial);
+      boundaryMesh.position.copy(boundary.position);
+      this.scene.add(boundaryMesh);
+
+      // Create corresponding CANNON.js bodies for collision
+      const boundaryBody = new CANNON.Body({ mass: 0 });
+      const boundaryShape = new CANNON.Box(new CANNON.Vec3(boundary.scale[0] / 2, boundary.scale[1] / 2, boundary.scale[2] / 2)); // Half extents
+      boundaryBody.addShape(boundaryShape);
+      boundaryBody.position.set(boundary.position.x, boundary.position.y, boundary.position.z);
+      this.world.addBody(boundaryBody);
     });
   }
 }
