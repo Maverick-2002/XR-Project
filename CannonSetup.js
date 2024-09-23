@@ -3,7 +3,6 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import * as CANNON from 'cannon-es';
 import { Movement } from './Movement.js';
 import { AssetSpawner } from './AssetSpawner.js';
-import { CameraCoordinates } from './CameraCoordinates.js';
 import { MouseCoordinates } from './MouseCoordinates.js';
 import { RoomBoundary } from './RoomBoundary.js';
 
@@ -19,9 +18,11 @@ const controls = new OrbitControls(camera, renderer.domElement);
 const world = new CANNON.World();
 world.gravity.set(0, -9.82, 0);
 
-const room1 = new RoomBoundary(scene, world, { width: 4, height: 5, depth: 20, boundaryThickness: 0.1, position: { x: -11, y: 0, z: -13 } });
-const room2 = new RoomBoundary(scene, world, { width: 15, height: 5, depth: 25, boundaryThickness: 0.1, position: { x:-7.5, y:0, z:10 },visible:false });
-
+const room1 = new RoomBoundary(scene, world, { width: 4, height: 5, depth: 35, boundaryThickness: 0.1, position: { x: -11, y: 1, z: -21 }, visible: true });
+const room2 = new RoomBoundary(scene, world, { width: 15, height: 5, depth: 25, boundaryThickness: 0.1, position: { x: -7.5, y: 1, z: 10 }, visible: true });
+const room3 = new RoomBoundary(scene, world, { width: 15, height: 5, depth: 35, boundaryThickness: 0.1, position: { x: -7.5, y: 1, z: 42 }, visible: true });
+const room4 = new RoomBoundary(scene, world, { width: 10, height: 5, depth: 5, boundaryThickness: 0.1, position: { x: -20.5, y: 1, z: 57 }, visible: true });
+const room5 = new RoomBoundary(scene, world, { width: 20, height: 5, depth: 15, boundaryThickness: 0.1, position: { x: -15.5, y: 1, z: 68 }, visible: true });
 
 const cubeBody = new CANNON.Body({
   mass: 1,
@@ -52,8 +53,39 @@ const mouseCoordinates = new MouseCoordinates(camera, scene);
 
 const movement = new Movement(cubeBody);
 const assetSpawner = new AssetSpawner(scene, world);
-const cameraOffset = new THREE.Vector3(0, 1.5, 5); // Adjust this for desired offset
-const cameraCoordinates = new CameraCoordinates(camera);
+
+// Function to save camera position and rotation
+function saveCameraPosition() {
+  const cameraData = {
+    position: {
+      x: camera.position.x,
+      y: camera.position.y,
+      z: camera.position.z
+    },
+    rotation: {
+      x: camera.rotation.x,
+      y: camera.rotation.y,
+      z: camera.rotation.z
+    }
+  };
+  localStorage.setItem('cameraPosition', JSON.stringify(cameraData));
+}
+
+// Function to load camera position and rotation
+function loadCameraPosition() {
+  const savedData = localStorage.getItem('cameraPosition');
+  if (savedData) {
+    const cameraData = JSON.parse(savedData);
+    camera.position.set(cameraData.position.x, cameraData.position.y, cameraData.position.z);
+    camera.rotation.set(cameraData.rotation.x, cameraData.rotation.y, cameraData.rotation.z);
+  }
+}
+
+// Call this function when initializing your scene
+loadCameraPosition();
+
+// Call saveCameraPosition() at desired moments, such as before reloading the scene
+window.addEventListener('beforeunload', saveCameraPosition);
 
 function animate() {
   requestAnimationFrame(animate);
@@ -67,13 +99,8 @@ function animate() {
   cube.position.copy(cubeBody.position);
   cube.quaternion.copy(cubeBody.quaternion);
 
-  // Update camera position to follow the cube
-  camera.position.copy(cube.position).add(cameraOffset);
-  camera.lookAt(cube.position); // Make the camera look at the cube
-
   // Render the scene
   renderer.render(scene, camera);
-  cameraCoordinates.update();
 }
 
 animate();
