@@ -1,12 +1,11 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import * as CANNON from 'cannon-es';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Movement } from './Movement.js';
 import { AssetSpawner } from './AssetSpawner.js';
 import { CameraCoordinates } from './CameraCoordinates.js';
 import { MouseCoordinates } from './MouseCoordinates.js';
-import { RoomBoundary } from './RoomBoundary.js'; // Adjust the path as needed
+import { RoomBoundary } from './RoomBoundary.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
