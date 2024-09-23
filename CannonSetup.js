@@ -21,7 +21,7 @@ const world = new CANNON.World();
 world.gravity.set(0, -9.82, 0);
 
 const room1 = new RoomBoundary(scene, world, { width: 4, height: 5, depth: 20, boundaryThickness: 0.1, position: { x: -11, y: 0, z: -13 } });
-const room2 = new RoomBoundary(scene, world, { width: 8, height: 5, depth: 12, boundaryThickness: 0.1, position: { x: 15, y: 2.5, z: 0 } });
+const room2 = new RoomBoundary(scene, world, { width: 15, height: 5, depth: 25, boundaryThickness: 0.1, position: { x:-7.5, y:0, z:10 },visible:false });
 
 
 const cubeBody = new CANNON.Body({

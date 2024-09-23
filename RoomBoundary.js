@@ -13,6 +13,7 @@ export class RoomBoundary {
       depth: options.depth || 10,
       boundaryThickness: options.boundaryThickness || 0.1,
       position: options.position || { x: 0, y: 0, z: 0 },
+      visible: options.visible !== undefined ? options.visible : true // Set visibility option
     };
 
     this.boundaries = [];
@@ -41,6 +42,7 @@ export class RoomBoundary {
     const wallMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00, wireframe: true }); // Green for visualization
     const wallMesh = new THREE.Mesh(wallGeometry, wallMaterial);
     wallMesh.position.copy(position);
+    wallMesh.visible = this.options.visible; // Set visibility based on options
     this.scene.add(wallMesh);
 
     // Create corresponding CANNON.js body for collision
