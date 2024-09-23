@@ -76,7 +76,8 @@ scene.add(ambientLight);
 // Camera setup
 camera.position.set(0, 1.5, 5);
 const mouseCoordinates = new MouseCoordinates(camera, scene);
-const movement = new Movement(cubeBody);
+const movement = new Movement(cubeBody, world); // Pass the world to handle jumping logic
+
 const assetSpawner = new AssetSpawner(scene, world);
 
 // Function to save camera position and rotation
