@@ -17,7 +17,7 @@ export class Door {
 
     // Create Three.js mesh for the door
     const doorGeometry = new THREE.BoxGeometry(width, height, depth);
-    const doorMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 }); // Brown for door
+    const doorMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513,wireframe:true }); // Brown for door
     this.doorMesh = new THREE.Mesh(doorGeometry, doorMaterial);
     this.doorMesh.position.set(position.x, position.y, position.z);
     this.doorMesh.visible = this.isOpen; // Set initial visibility based on isOpen
@@ -56,7 +56,7 @@ export class Door {
         player.body.position.set(this.destination.x, this.destination.y, this.destination.z);
       }
     } else if (!this.isOpen) {
-      console.log('The door is closed!');
+
     }
   }
 }
