@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 export class Puzzle {
-  constructor(scene, textureURL, position = { x: -7, y: 2, z: 8 }, gap = 0.5, camera) {
+  constructor(scene, textureURL, position = { x: -7, y: 2, z: 8 }, gap = 0.25, camera) {
     this.scene = scene;
     this.textureURL = textureURL;
     this.tiles = [];

@@ -6,7 +6,7 @@ import { AssetSpawner } from './AssetSpawner.js';
 import { MouseCoordinates } from './MouseCoordinates.js';
 import { RoomBoundary } from './RoomBoundary.js';
 import { Door } from './Door.js';
-import { Puzzle } from './Puzzle.js';
+//import { Puzzle } from './Puzzle.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -21,7 +21,7 @@ const world = new CANNON.World();
 world.gravity.set(0, -9.82, 0);
 
 const puzzleTextureURL = 'https://cdn.glitch.global/9840aa6a-2e73-4088-b83c-d68a4642d7be/Screenshot%202024-09-23%20214844.png?v=1727109008453';
-const puzzle = new Puzzle(scene, puzzleTextureURL);
+//const puzzle = new Puzzle(scene, puzzleTextureURL);
 
 // Create room boundaries
 const rooms = [
@@ -88,7 +88,6 @@ const mouseCoordinates = new MouseCoordinates(camera, scene);
 const movement = new Movement(cubeBody, world, camera); // Pass the world to handle jumping logic
 
 const assetSpawner = new AssetSpawner(scene, world);
-
 // Animation loop
 function animate() {
     requestAnimationFrame(animate);
@@ -101,8 +100,10 @@ function animate() {
     // Update cube position and rotation
     cube.position.copy(cubeBody.position);
     cube.quaternion.copy(cubeBody.quaternion);
+    
 
     // Follow the cube with the camera
+ 
     camera.position.set(cube.position.x, cube.position.y + 1.5, cube.position.z);
 
     // Check if the player is near any door to pass through
