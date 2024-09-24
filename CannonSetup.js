@@ -59,7 +59,7 @@ const pillars = [
 // Create the player cube
 const cubeBody = new CANNON.Body({
     mass: 1,
-    position: new CANNON.Vec3(-2, 5, 0),
+    position: new CANNON.Vec3(-10, -0.4, -26),
     fixedRotation: true // Prevents rotation
 });
 const cubeShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5));
@@ -85,6 +85,9 @@ scene.add(ambientLight);
 
 // Camera setup
 camera.position.set(0, 1.5, 5);
+
+// Rotate the camera to look back 180 degrees around the Y-axis
+camera.rotation.y = Math.PI; // 180 degrees in radians
 const mouseCoordinates = new MouseCoordinates(camera, scene);
 // Assuming you have a camera object named 'camera' defined somewhere
 const movement = new Movement(cubeBody, world, camera); // Pass the world to handle jumping logic

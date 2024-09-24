@@ -48,7 +48,7 @@ export class Movement {
       case 'Space': // Jump
         if (!this.isJumping) {
           this.isJumping = true;
-          this.cubeBody.velocity.y = 10; // Apply vertical velocity for jump
+          this.cubeBody.velocity.y = 8; // Apply vertical velocity for jump
         }
         break;
     }
