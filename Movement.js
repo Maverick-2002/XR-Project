@@ -15,7 +15,7 @@ export class Movement {
       space: { pressed: false },
     };
     this.isJumping = false;
-    this.moveSpeed = 20;
+    this.moveSpeed = 15;
 
     // Event listeners for keydown and keyup
     window.addEventListener('keydown', (event) => this.onKeyDown(event));
