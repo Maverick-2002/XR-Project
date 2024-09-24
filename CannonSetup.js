@@ -45,14 +45,14 @@ const doors = [
     new Door(scene, world, { width: 2, height: 4, depth: 0, position: { x: -23, y: 1, z: 61 }, visible: true, destination: { x: -23, y: 1, z: 57.5 } }),
 ];
 
-const pillars =[
-  new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -10.7, y: 1.5, z: 39 }, visible: false }),
-  new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -4.4, y: 1.5, z: 39 }, visible: false }),
-  new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -10.7, y: 1.5, z: 28.5 }, visible: false }),
-  new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -4.4, y: 1.5, z: 28.5}, visible: false }),
-  new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -10.7, y: 1.5, z: 49 }, visible: false }),
-  new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -4.4, y: 1.5, z: 49 }, visible: false}),
-]
+const pillars = [
+    new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -10.7, y: 1.5, z: 39 }, visible: false }),
+    new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -4.4, y: 1.5, z: 39 }, visible: false }),
+    new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -10.7, y: 1.5, z: 28.5 }, visible: false }),
+    new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -4.4, y: 1.5, z: 28.5 }, visible: false }),
+    new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -10.7, y: 1.5, z: 49 }, visible: false }),
+    new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -4.4, y: 1.5, z: 49 }, visible: false }),
+];
 
 // Create the player cube
 const cubeBody = new CANNON.Body({
@@ -66,7 +66,9 @@ world.addBody(cubeBody);
 
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 const cubeMaterial = new THREE.MeshStandardMaterial({ color: '#00ff00' });
+// Set cube visible to false
 const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+cube.visible = false;  // Make the cube invisible
 cube.castShadow = true;
 scene.add(cube);
 
@@ -104,11 +106,20 @@ function animate() {
 
     // Check if the player is near any door to pass through
     doors.forEach(door => {
-        door.passThrough(cubeBody);  // Check with the player's position (cube position)
+        door.passThrough(cubeBody);  // Check with the cube body
     });
 
     // Render the scene
     renderer.render(scene, camera);
 }
 
-animate()
+animate();
+
+// Handle window resize
+window.addEventListener('resize', () => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+});
