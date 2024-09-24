@@ -1,21 +1,25 @@
 import * as THREE from 'three';
 
 export class Puzzle {
-  constructor(scene, textureURL, position = { x: -7, y: 2, z: 8 }, gap = 0.5) {
+  constructor(scene, textureURL, position = { x: -7, y: 2, z: 8 }, gap = 0.5, camera) {
     this.scene = scene;
     this.textureURL = textureURL;
     this.tiles = [];
     this.position = position; // Set the position
     this.gap = gap; // Set the gap
     this.emptyTileIndex = 8; // Initially, the last tile is empty
-    this.createPuzzle();
+    this.camera = camera; // Camera used for raycasting
+    this.line = null; // Line to visualize the ray
 
     // Raycaster and mouse vector for interaction
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
 
-    // Add click event listener
-    window.addEventListener('click', this.onMouseClick.bind(this), false);
+    // Add event listener for right-click
+    window.addEventListener('contextmenu', this.onMouseRightClick.bind(this), false);
+
+    // Create puzzle grid
+    this.createPuzzle();
   }
 
   async createPuzzle() {
@@ -28,9 +32,7 @@ export class Puzzle {
       for (let col = 0; col < 3; col++) {
         const tileMaterial = new THREE.MeshBasicMaterial({
           map: this.createTileTexture(texture, col, row),
-          transparent: true,
-          opacity: 1,
-          side: THREE.DoubleSide // Make sure the texture is rendered on both sides
+          side: THREE.DoubleSide, // Make sure the texture is rendered on both sides
         });
 
         const tile = new THREE.Mesh(tileGeometry, tileMaterial);
@@ -70,14 +72,20 @@ export class Puzzle {
     return tileTexture;
   }
 
-  onMouseClick(event) {
+  onMouseRightClick(event) {
+    // Prevent the default context menu from showing up on right-click
+    event.preventDefault();
+
     // Convert mouse click to normalized device coordinates
     this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     // Set the raycaster
-    this.raycaster.setFromCamera(this.mouse, this.scene.camera);
+    this.raycaster.setFromCamera(this.mouse, this.camera);
     const intersects = this.raycaster.intersectObjects(this.tiles);
+
+    // Visualize raycast with a line
+    this.showRaycastLine();
 
     if (intersects.length > 0) {
       const selectedTile = intersects[0].object;
@@ -112,5 +120,23 @@ export class Puzzle {
     // Hide the empty tile and show the moved tile
     this.tiles[index2].visible = true;
     this.tiles[index1].visible = false; // Set the moved tile to be the empty one
+  }
+
+  // Function to visualize the raycast line
+  showRaycastLine() {
+    if (this.line) {
+      this.scene.remove(this.line); // Remove the previous line if it exists
+    }
+
+    const rayStart = this.camera.position.clone();
+    const rayDirection = this.raycaster.ray.direction.clone().normalize();
+    const rayEnd = rayStart.clone().add(rayDirection.multiplyScalar(100)); // Extend the line 100 units
+
+    const points = [rayStart, rayEnd];
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({ color: 0xff0000, linewidth: 5 }); // Red line
+
+    this.line = new THREE.Line(geometry, material);
+    this.scene.add(this.line);
   }
 }
