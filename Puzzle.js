@@ -29,7 +29,8 @@ export class Puzzle {
         const tileMaterial = new THREE.MeshBasicMaterial({
           map: this.createTileTexture(texture, col, row),
           transparent: true,
-          opacity: 1
+          opacity: 1,
+          side: THREE.DoubleSide // Make sure the texture is rendered on both sides
         });
 
         const tile = new THREE.Mesh(tileGeometry, tileMaterial);
