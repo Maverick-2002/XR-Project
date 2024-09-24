@@ -1,9 +1,11 @@
 import * as CANNON from 'cannon-es';
+import { Vector3 } from 'three'; // Import Vector3 from Three.js
 
 export class Movement {
-  constructor(cubeBody, world) {
+  constructor(cubeBody, world, camera) {
     this.cubeBody = cubeBody;
     this.world = world;
+    this.camera = camera;
     this.keys = {
       a: { pressed: false },
       d: { pressed: false },
@@ -13,6 +15,7 @@ export class Movement {
       space: { pressed: false },
     };
     this.isJumping = false;
+    this.moveSpeed = 20;
 
     // Event listeners for keydown and keyup
     window.addEventListener('keydown', (event) => this.onKeyDown(event));
@@ -75,29 +78,33 @@ export class Movement {
   }
 
   handleMovement() {
-    const moveSpeed = 20;
     const velocity = this.cubeBody.velocity;
 
-    // Horizontal movement (A and D keys)
-    if (this.keys.a.pressed) {
-      velocity.x = -moveSpeed;
-    } else if (this.keys.d.pressed) {
-      velocity.x = moveSpeed;
-    } else {
-      velocity.x = 0;
+    // Get the camera's forward direction as a normalized Vector3
+    const forward = new Vector3();
+    this.camera.getWorldDirection(forward);
+    forward.normalize();
+
+    // Calculate the desired movement direction based on WASD keys and camera forward
+    const direction = new Vector3();
+    if (this.keys.d.pressed) {
+      direction.crossVectors(forward, this.camera.up); // Move right relative to camera (original)
+    } else if (this.keys.a.pressed) {
+      direction.crossVectors(forward, this.camera.up).negate(); // Move left relative to camera (invert)
     }
 
-    // Forward/Backward movement (W and S keys)
     if (this.keys.w.pressed) {
-      velocity.z = -moveSpeed;
+      direction.copy(forward); // Move forward relative to camera
     } else if (this.keys.s.pressed) {
-      velocity.z = moveSpeed;
-    } else {
-      velocity.z = 0;
+      direction.copy(forward).negate(); // Move backward relative to camera
     }
+
+    // Apply movement based on direction and speed
+    velocity.x = direction.x * this.moveSpeed;
+    velocity.z = direction.z * this.moveSpeed;
   }
 
-  // Check if the player is grounded
+  // Check if the player is grounded (same as before)
   checkIfGrounded() {
     const groundLevel = 0; // Adjust according to the actual ground level in your scene
     const velocityThreshold = 0.1; // Threshold to consider the player grounded
