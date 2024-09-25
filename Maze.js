@@ -16,13 +16,18 @@ export class Maze {
       [0, 0, 0, 1, 0, 1],
       [1, 1, 0, 1, 1, 1]
     ]; // 6x6 maze layout
+
+    // Load texture
+    this.textureLoader = new THREE.TextureLoader();
+    this.wallTexture = this.textureLoader.load('https://cdn.glitch.global/9840aa6a-2e73-4088-b83c-d68a4642d7be/Screenshot%202024-09-25%20134211.png?v=1727251984445');
+
     this.createMaze();
   }
 
   createMaze() {
-    // Create Three.js wall geometry and material
+    // Create Three.js wall geometry and material with texture
     const wallGeometry = new THREE.BoxGeometry(this.wallSize, this.wallHeight, this.wallSize);
-    const wallMaterial = new THREE.MeshStandardMaterial({ color: 0x3f8729 });
+    const wallMaterial = new THREE.MeshStandardMaterial({ map: this.wallTexture }); // Apply the texture
 
     for (let row = 0; row < this.mazeData.length; row++) {
       for (let col = 0; col < this.mazeData[row].length; col++) {
