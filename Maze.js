@@ -19,7 +19,12 @@ export class Maze {
 
     // Load texture
     this.textureLoader = new THREE.TextureLoader();
-    this.wallTexture = this.textureLoader.load('https://cdn.glitch.global/9840aa6a-2e73-4088-b83c-d68a4642d7be/Screenshot%202024-09-25%20134211.png?v=1727251984445');
+    this.wallTexture = this.textureLoader.load('https://cdn.glitch.global/9840aa6a-2e73-4088-b83c-d68a4642d7be/Screenshot%202024-09-25%20134211.png?v=1727251984445', (texture) => {
+      // Set texture repeat and wrap
+      texture.wrapS = THREE.RepeatWrapping;  // Wrap horizontally
+      texture.wrapT = THREE.RepeatWrapping;  // Wrap vertically
+      texture.repeat.set(this.wallSize / 2, this.wallHeight / 2); // Adjust repeat to cover the wall size
+    });
 
     this.createMaze();
   }
