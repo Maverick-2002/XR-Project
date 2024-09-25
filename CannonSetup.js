@@ -6,8 +6,9 @@ import { AssetSpawner } from './AssetSpawner.js';
 import { MouseCoordinates } from './MouseCoordinates.js';
 import { RoomBoundary } from './RoomBoundary.js';
 import { Door } from './Door.js';
-import { Puzzle } from './Puzzle.js';
-import { TimerUI } from './TimerUI.js';
+import { Maze } from './Maze.js';
+//import { Puzzle } from './Puzzle.js';
+//import { TimerUI } from './TimerUI.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -18,12 +19,13 @@ document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
+
 const world = new CANNON.World();
 world.gravity.set(0, -9.82, 0);
 
 const puzzleTextureURL = 'https://cdn.glitch.global/9840aa6a-2e73-4088-b83c-d68a4642d7be/Screenshot%202024-09-23%20214844.png?v=1727109008453';
-const puzzle = new Puzzle(scene, puzzleTextureURL);
-const timerUI = new TimerUI('timer');
+//const puzzle = new Puzzle(scene, puzzleTextureURL);
+//const timerUI = new TimerUI('timer');
 
 // Create room boundaries
 const rooms = [
@@ -91,7 +93,7 @@ camera.rotation.y = Math.PI; // 180 degrees in radians
 const mouseCoordinates = new MouseCoordinates(camera, scene);
 // Assuming you have a camera object named 'camera' defined somewhere
 const movement = new Movement(cubeBody, world, camera); // Pass the world to handle jumping logic
-
+const maze = new Maze(scene,world, { x: -13.5, y: -2, z: 38 },2.5, 6);
 const assetSpawner = new AssetSpawner(scene, world);
 // Animation loop
 function animate() {
