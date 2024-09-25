@@ -7,6 +7,7 @@ import { MouseCoordinates } from './MouseCoordinates.js';
 import { RoomBoundary } from './RoomBoundary.js';
 import { Door } from './Door.js';
 import { Maze } from './Maze.js';
+import { GameManager } from './GameManager.js';
 //import { Puzzle } from './Puzzle.js';
 //import { TimerUI } from './TimerUI.js';
 
@@ -61,7 +62,7 @@ const pillars = [
 // Create the player cube
 const cubeBody = new CANNON.Body({
     mass: 1,
-    position: new CANNON.Vec3(-10, -0.4, -26),
+    position: new CANNON.Vec3(-11.5, -0.4, -26),
     fixedRotation: true // Prevents rotation
 });
 const cubeShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5));
@@ -95,6 +96,7 @@ const mouseCoordinates = new MouseCoordinates(camera, scene);
 const movement = new Movement(cubeBody, world, camera); // Pass the world to handle jumping logic
 const maze = new Maze(scene,world, { x: -13.5, y: -2, z: 38 },2.5, 6);
 const assetSpawner = new AssetSpawner(scene, world);
+const gameManager = new GameManager(scene, camera, world, renderer);
 // Animation loop
 function animate() {
     requestAnimationFrame(animate);

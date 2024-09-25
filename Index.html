@@ -8,10 +8,31 @@
         body {
             margin: 0;
         }
+        #start-screen, #end-screen {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10;
+            flex-direction: column; /* Added to stack items vertically */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 20px;
+        }
+        h1 {
+            color: white;
+            margin-bottom: 20px; /* Space between the text and the button */
+            font-size: 48px;
+        }
+        #start-screen, #end-screen {
+            display: none;
+        }
     </style>
-
     <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
-
     <script type="importmap">
       {
         "imports": {
@@ -26,9 +47,20 @@
     </script>
 </head>
 <body>
+    <!-- Start Screen -->
+    <div id="start-screen">
+        <h1>Pyramid Game</h1> <!-- Title added here -->
+        <button id="start-button">Start Game</button>
+    </div>
+
+    <!-- End Screen -->
+    <div id="end-screen">
+        <h1>Game Over!</h1>
+        <button id="reset-button">Reset</button>
+    </div>
+
     <script type="module" src="CannonSetup.js"></script>
     <script type="module" src="Movement.js"></script>
     <script type="module" src="CannonSetup.js"></script>
-
 </body>
 </html>
