@@ -97,8 +97,20 @@ const movement = new Movement(cubeBody, world, camera); // Pass the world to han
 const maze = new Maze(scene,world, { x: -13.5, y: -2, z: 38 },2.5, 6);
 const assetSpawner = new AssetSpawner(scene, world);
 const gameManager = new GameManager(scene, camera, world, renderer);
+let isGameRunning = false;
+
+gameManager.onStart = function() {
+    isGameRunning = true; // Set the game running flag
+    animate(); // Start the animation loop
+};
+
+gameManager.onReset = function() {
+    // Implement any game reset logic here (e.g., reset positions, velocities)
+    console.log("Game reset!");
+};
 // Animation loop
 function animate() {
+    
     requestAnimationFrame(animate);
     world.step(1 / 60);
     cubeBody.angularVelocity.set(0, 0, 0);
@@ -124,7 +136,8 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-animate();
+if (isGameRunning) {
+animate();}
 
 // Handle window resize
 window.addEventListener('resize', () => {

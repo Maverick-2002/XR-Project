@@ -24,6 +24,7 @@ export class GameManager {
         this.startScreen.style.display = 'none';
         this.endScreen.style.display = 'none';
         this.gameOver = false;
+        
 
         // Call an external function to actually start the game
         if (typeof this.onStart === 'function') {
@@ -34,6 +35,7 @@ export class GameManager {
     resetGame() {
         this.endScreen.style.display = 'none';
         this.gameOver = false;
+        isGameRunning = false;
 
         // Call an external function to reset the game
         if (typeof this.onReset === 'function') {
