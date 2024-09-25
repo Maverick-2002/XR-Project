@@ -8,8 +8,8 @@ import { RoomBoundary } from './RoomBoundary.js';
 import { Door } from './Door.js';
 import { Maze } from './Maze.js';
 import { GameManager } from './GameManager.js';
-//import { Puzzle } from './Puzzle.js';
-//import { TimerUI } from './TimerUI.js';
+import { Shooting } from './Shooting.js';   
+
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -24,9 +24,8 @@ const controls = new OrbitControls(camera, renderer.domElement);
 const world = new CANNON.World();
 world.gravity.set(0, -9.82, 0);
 
-const puzzleTextureURL = 'https://cdn.glitch.global/9840aa6a-2e73-4088-b83c-d68a4642d7be/Screenshot%202024-09-23%20214844.png?v=1727109008453';
-//const puzzle = new Puzzle(scene, puzzleTextureURL);
-//const timerUI = new TimerUI('timer');
+
+
 
 // Create room boundaries
 const rooms = [
@@ -43,7 +42,7 @@ const doors = [
     new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -11.5, y: 0.8, z: -4 }, visible: true, destination: { x: -11.6, y: -0.4, z: -1 } }),
     new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -7.5, y: 0.8, z: 22.5 }, visible: true, destination: { x: -7.4, y: -0.4, z: 28 } }),
     new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -7.5, y: 0.8, z: 25 }, visible: true, destination: { x: -7.4, y: -0.4, z: 21 } }),
-    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -12.5, y: 0.8, z: 75.5 }, visible: true, destination: { x: -20, y: 1, z: 0 } }),
+    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -12.5, y: 0.8, z: 75.5 }, visible: true, destination: { x: 0, y: 0, z: 0 } }),
     new Door(scene, world, { width: 0.1, height: 2, depth: 4.5, position: { x: -14.5, y: -0.4, z: 57 }, visible: true, destination: { x: -17.5, y: -0.4, z: 57 } }),
     new Door(scene, world, { width: 0.1, height: 2, depth: 4.5, position: { x: -16, y: -0.4, z: 57 }, visible: true, destination: { x: -12.5, y: -0.4, z: 57 } }),
     new Door(scene, world, { width: 2, height: 4, depth: 0, position: { x: -23, y: 1, z: 59 }, visible: true, destination: { x: -23, y: 1, z: 64 } }),
@@ -98,6 +97,7 @@ const maze = new Maze(scene,world, { x: -13.5, y: -2, z: 38 },2.5, 6);
 const assetSpawner = new AssetSpawner(scene, world);
 const gameManager = new GameManager(scene, camera, world, renderer);
 let isGameRunning = false;
+const shooting = new Shooting(scene, world, cubeBody, camera, renderer.domElement); // Pass the camera here
 
 gameManager.onStart = function() {
     isGameRunning = true; // Set the game running flag
@@ -105,8 +105,16 @@ gameManager.onStart = function() {
 };
 
 gameManager.onReset = function() {
-    // Implement any game reset logic here (e.g., reset positions, velocities)
     console.log("Game reset!");
+    
+    // Reset player position
+    cubeBody.position.set(-11.5, -0.4, -26); // Set to starting position (adjust as needed)
+    cubeBody.velocity.set(0, 0, 0); // Reset velocity
+    cubeBody.angularVelocity.set(0, 0, 0); // Reset angular velocity
+
+    // You can also reset any other game elements, like score, level, etc.
+    isGameRunning = false; // Optionally set to false if you want to stop the game after reset
+    this.showStartScreen(); // Show start screen after reset
 };
 // Animation loop
 function animate() {
@@ -134,6 +142,9 @@ function animate() {
 
     // Render the scene
     renderer.render(scene, camera);
+
+    shooting.updateProjectiles(); // Update projectiles
+    shooting.checkCollisions(); 
 }
 
 if (isGameRunning) {
