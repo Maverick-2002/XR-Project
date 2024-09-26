@@ -10,6 +10,7 @@ export class Shooting {
         this.domElement = domElement; // The DOM element to capture mouse clicks
         this.projectiles = [];
         this.targets = [];
+        this.score = 0; // Initialize the score
 
         // Raycaster for mouse picking
         this.raycaster = new THREE.Raycaster();
@@ -53,12 +54,11 @@ export class Shooting {
 
     shoot(targetPoint) {
         // Play bullet sound
-        this.bulletSound.play()
+        this.bulletSound.play();
         setTimeout(() => {
             this.bulletSound.pause();   // Pause the sound
             this.bulletSound.currentTime = 0;  // Reset sound to the start
         }, 200); // Adjust the duration (in milliseconds) as needed
-    ;
 
         // Create a projectile (e.g., sphere)
         const projectileGeometry = new THREE.SphereGeometry(0.2, 32, 32);
@@ -123,7 +123,7 @@ export class Shooting {
     spawnTarget(position) {
         // Create a target block (cube)
         const targetGeometry = new THREE.BoxGeometry(1, 1, 1);
-        const targetMaterial = new THREE.MeshStandardMaterial({ color: '#00ff00' });
+        const targetMaterial = new THREE.MeshStandardMaterial({ color: '#f0ff00' });
         const targetMesh = new THREE.Mesh(targetGeometry, targetMaterial);
         targetMesh.position.copy(position);
         this.scene.add(targetMesh);
@@ -153,14 +153,21 @@ export class Shooting {
                         
                         // Mark the target as hit
                         target.hit = true;
-    
+
+                        // Change the target's color to FAD5A5
+                        target.mesh.material.color.set('#FAD5A5');
+                        
+                        // Increment the score
+                        this.score += 10;
+                        console.log(`Score: ${this.score}`);
+
                         // Remove the target from the scene and world
                         this.scene.remove(target.mesh);
                         this.world.removeBody(target.body);
-    
+
                         // Remove the target from the array
                         this.targets = this.targets.filter(t => t.mesh !== target.mesh);
-    
+
                         // Destroy the projectile
                         this.destroyProjectile(projectile.mesh, projectile.body);
                     }
