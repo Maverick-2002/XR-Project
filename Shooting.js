@@ -10,7 +10,7 @@ export class Shooting {
         this.domElement = domElement; // The DOM element to capture mouse clicks
         this.projectiles = [];
         this.targets = [];
-        this.score = 0; // Initialize the score
+        this.score = 0; // Initialize score
 
         // Raycaster for mouse picking
         this.raycaster = new THREE.Raycaster();
@@ -33,6 +33,9 @@ export class Shooting {
         // Load bullet spawn sound
         this.bulletSound = new Audio('interface-1-126517.mp3');
         this.bulletSound.volume = 0.5;  // Adjust volume as needed
+
+        // Update score display on the screen
+        this.updateScoreDisplay();
     }
 
     onMouseClick(event) {
@@ -150,16 +153,12 @@ export class Shooting {
                     const distance = target.body.position.distanceTo(projectile.body.position);
                     if (distance < 1) { // Adjust this threshold based on the size of your objects
                         console.log('Target hit!');
-                        
-                        // Mark the target as hit
-                        target.hit = true;
 
-                        // Change the target's color to FAD5A5
-                        target.mesh.material.color.set('#FAD5A5');
-                        
-                        // Increment the score
-                        this.score += 10;
-                        console.log(`Score: ${this.score}`);
+                        // Mark the target as hit and change its color
+                        target.hit = true;
+                        target.mesh.material.color.set('#FAD5A5'); // Change color to FAD5A5
+                        this.score += 10; // Increase score by 10
+                        this.updateScoreDisplay(); // Update score display
 
                         // Remove the target from the scene and world
                         this.scene.remove(target.mesh);
@@ -174,5 +173,12 @@ export class Shooting {
                 }
             });
         });
+    }
+
+    updateScoreDisplay() {
+        const scoreDisplay = document.getElementById('score-display');
+        if (scoreDisplay) {
+            scoreDisplay.textContent = `Score: ${this.score}`;
+        }
     }
 }

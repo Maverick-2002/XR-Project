@@ -25,6 +25,7 @@
         button {
             padding: 10px 20px;
             font-size: 20px;
+            cursor: pointer;
         }
         h1 {
             color: white;
@@ -32,12 +33,19 @@
             font-size: 48px;
         }
         h2 {
-            color:white;
+            color: white;
             margin-bottom: 15px; /* Space between the text and the button */
             font-size: 24px;
         }
-        #start-screen, #end-screen {
-            display: none;
+        #score-display {
+            position: absolute;
+            top: 10px; /* Adjusts the vertical position */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Offset to truly center */
+            color: red; /* Change score color to red */
+            font-size: 36px; /* Adjust font size as necessary */
+            z-index: 20; /* Ensure score is above other elements */
+            display: none; /* Initially hidden */
         }
     </style>
     <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -48,13 +56,16 @@
           "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/",
           "cannon-es": "https://cdn.jsdelivr.net/npm/cannon-es/dist/cannon-es.js",
           "CannonSetup": "./CannonSetup.js",
-          "movement": "./Movement.js",
-          "assetSpawner": "./AssetSpawner.js"
+          "Movement": "./Movement.js",
+          "AssetSpawner": "./AssetSpawner.js"
         }
       }
     </script>
 </head>
 <body>
+    <!-- Score Display -->
+    <div id="score-display">Score: 0</div>
+
     <!-- Start Screen -->
     <div id="start-screen">
         <h1>Pyramid Game</h1>
@@ -63,8 +74,9 @@
     </div>
 
     <!-- End Screen -->
-    <div id="end-screen">
+    <div id="end-screen" style="display: none;">
         <h1>Game Over!</h1>
+        <h2>Your score: <span id="final-score">0</span></h2>
         <button id="reset-button">Reset</button>
     </div>
 
@@ -73,6 +85,20 @@
 
     <script type="module" src="CannonSetup.js"></script>
     <script type="module" src="Movement.js"></script>
-    <script type="module" src="CannonSetup.js"></script>
+    <script type="module" src="AssetSpawner.js"></script>
+    
+    <script>
+        // JavaScript to control the visibility of the score display
+        const startButton = document.getElementById('start-button');
+        const scoreDisplay = document.getElementById('score-display');
+
+        startButton.addEventListener('click', () => {
+            // Hide the start screen and show the score display
+            document.getElementById('start-screen').style.display = 'none';
+            scoreDisplay.style.display = 'block'; // Show score display
+
+            // Start your game logic here...
+        });
+    </script>
 </body>
 </html>
