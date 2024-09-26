@@ -8,8 +8,7 @@ import { RoomBoundary } from './RoomBoundary.js';
 import { Door } from './Door.js';
 import { Maze } from './Maze.js';
 import { GameManager } from './GameManager.js';
-import { Shooting } from './Shooting.js';   
-
+import { Shooting } from './Shooting.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -20,12 +19,8 @@ document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
-
 const world = new CANNON.World();
 world.gravity.set(0, -9.82, 0);
-
-
-
 
 // Create room boundaries
 const rooms = [
@@ -38,15 +33,15 @@ const rooms = [
 
 // Create multiple doors
 const doors = [
-    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -11.5, y: 0.8, z: -2 },  destination: { x: -11.6, y: -0.4, z: -5 } }),
-    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -11.5, y: 0.8, z: -4 },  destination: { x: -11.6, y: -0.4, z: -1 } }),
-    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -7.5, y: 0.8, z: 22.5 },  destination: { x: -7.4, y: -0.4, z: 28 } }),
-    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -7.5, y: 0.8, z: 25 },  destination: { x: -7.4, y: -0.4, z: 21 } }),
-    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -12.5, y: 0.8, z: 75.5 },  destination: {  x: -12.5, y: 0.8, z: 78.5} }),
-    new Door(scene, world, { width: 0.1, height: 2, depth: 4.5, position: { x: -14.5, y: -0.4, z: 57 },  destination: { x: -17.5, y: -0.4, z: 57 } }),
-    new Door(scene, world, { width: 0.1, height: 2, depth: 4.5, position: { x: -16, y: -0.4, z: 57 },  destination: { x: -12.5, y: -0.4, z: 57 } }),
-    new Door(scene, world, { width: 2, height: 4, depth: 0, position: { x: -23, y: 1, z: 59 },  destination: { x: -23, y: 1, z: 64 } }),
-    new Door(scene, world, { width: 2, height: 4, depth: 0, position: { x: -23, y: 1, z: 61 },  destination: { x: -23, y: 1, z: 57.5 } }),
+    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -11.5, y: 0.8, z: -2 }, destination: { x: -11.6, y: -0.4, z: -5 } }),
+    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -11.5, y: 0.8, z: -4 }, destination: { x: -11.6, y: -0.4, z: -1 } }),
+    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -7.5, y: 0.8, z: 22.5 }, destination: { x: -7.4, y: -0.4, z: 28 } }),
+    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -7.5, y: 0.8, z: 25 }, destination: { x: -7.4, y: -0.4, z: 21 } }),
+    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -12.5, y: 0.8, z: 75.5 }, destination: { x: -12.5, y: 0.8, z: 78.5 } }),
+    new Door(scene, world, { width: 0.1, height: 2, depth: 4.5, position: { x: -14.5, y: -0.4, z: 57 }, destination: { x: -17.5, y: -0.4, z: 57 } }),
+    new Door(scene, world, { width: 0.1, height: 2, depth: 4.5, position: { x: -16, y: -0.4, z: 57 }, destination: { x: -12.5, y: -0.4, z: 57 } }),
+    new Door(scene, world, { width: 2, height: 4, depth: 0, position: { x: -23, y: 1, z: 59 }, destination: { x: -23, y: 1, z: 64 } }),
+    new Door(scene, world, { width: 2, height: 4, depth: 0, position: { x: -23, y: 1, z: 61 }, destination: { x: -23, y: 1, z: 57.5 } }),
 ];
 
 const pillars = [
@@ -93,7 +88,7 @@ camera.rotation.y = Math.PI; // 180 degrees in radians
 const mouseCoordinates = new MouseCoordinates(camera, scene);
 // Assuming you have a camera object named 'camera' defined somewhere
 const movement = new Movement(cubeBody, world, camera); // Pass the world to handle jumping logic
-const maze = new Maze(scene,world, { x: -13.5, y: -2, z: 38 },2.5, 6);
+const maze = new Maze(scene, world, { x: -13.5, y: -2, z: 38 }, 2.5, 6);
 const assetSpawner = new AssetSpawner(scene, world);
 const gameManager = new GameManager(scene, camera, world, renderer);
 let isGameRunning = false;
@@ -106,19 +101,32 @@ gameManager.onStart = function() {
 
 gameManager.onReset = function() {
     console.log("Game reset!");
-    
-    // Reset player position
-    cubeBody.position.set(-11.5, -0.4, -26); // Set to starting position (adjust as needed)
-    cubeBody.velocity.set(0, 0, 0); // Reset velocity
-    cubeBody.angularVelocity.set(0, 0, 0); // Reset angular velocity
 
-    // You can also reset any other game elements, like score, level, etc.
-    isGameRunning = false; // Optionally set to false if you want to stop the game after reset
-    this.showStartScreen(); // Show start screen after reset
+    // Reset player position
+    cubeBody.position.set(-11.5, -0.4, -26);
+    cubeBody.velocity.set(0, 0, 0);
+    cubeBody.angularVelocity.set(0, 0, 0);
 };
+
+function showEndScene() {
+    console.log("Game Over! You've reached the end!");
+    isGameRunning = false; // Stop the game loop
+
+    // Display end message
+    const endMessage = document.createElement('div');
+    endMessage.style.position = 'absolute';
+    endMessage.style.width = '100%';
+    endMessage.style.textAlign = 'center';
+    endMessage.style.top = '50%';
+    endMessage.style.transform = 'translateY(-50%)';
+    endMessage.style.color = 'white';
+    endMessage.style.fontSize = '48px';
+    endMessage.innerHTML = "Congratulations! You've reached the end!";
+    document.body.appendChild(endMessage);
+}
+
 // Animation loop
 function animate() {
-    
     requestAnimationFrame(animate);
     world.step(1 / 60);
     cubeBody.angularVelocity.set(0, 0, 0);
@@ -130,9 +138,13 @@ function animate() {
     cube.position.copy(cubeBody.position);
     cube.quaternion.copy(cubeBody.quaternion);
     
+    // Check if the cube has reached the end position
+    if (cube.position.z > 75.5) {
+        showEndScene(); // Call the end scene function
+        return; // Exit the animate loop
+    }
 
     // Follow the cube with the camera
- 
     camera.position.set(cube.position.x, cube.position.y + 1.5, cube.position.z);
 
     // Check if the player is near any door to pass through
@@ -147,14 +159,18 @@ function animate() {
     shooting.checkCollisions(); 
 }
 
-if (isGameRunning) {
-animate();}
+// Start the game when ready
+document.addEventListener('keydown', (event) => {
+    if (event.code === 'Space' && !isGameRunning) {
+        gameManager.start(); // Call start method
+    }
+});
 
 // Handle window resize
 window.addEventListener('resize', () => {
     const width = window.innerWidth;
     const height = window.innerHeight;
+    renderer.setSize(width, height);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    renderer.setSize(width, height);
 });
