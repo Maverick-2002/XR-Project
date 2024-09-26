@@ -28,6 +28,10 @@ export class Shooting {
 
         // Spawn targets at predefined locations
         this.spawnTargets();
+
+        // Load bullet spawn sound
+        this.bulletSound = new Audio('interface-1-126517.mp3');
+        this.bulletSound.volume = 0.5;  // Adjust volume as needed
     }
 
     onMouseClick(event) {
@@ -48,6 +52,14 @@ export class Shooting {
     }
 
     shoot(targetPoint) {
+        // Play bullet sound
+        this.bulletSound.play()
+        setTimeout(() => {
+            this.bulletSound.pause();   // Pause the sound
+            this.bulletSound.currentTime = 0;  // Reset sound to the start
+        }, 200); // Adjust the duration (in milliseconds) as needed
+    ;
+
         // Create a projectile (e.g., sphere)
         const projectileGeometry = new THREE.SphereGeometry(0.2, 32, 32);
         const projectileMaterial = new THREE.MeshStandardMaterial({ color: '#ff0000' });
@@ -80,7 +92,7 @@ export class Shooting {
         // Set a timer to destroy the projectile after 3 seconds
         setTimeout(() => {
             this.destroyProjectile(projectileMesh, projectileBody);
-        }, 800); // 3000 milliseconds = 3 seconds
+        }, 800); // 800 milliseconds = 0.8 seconds
     }
 
     destroyProjectile(projectileMesh, projectileBody) {
@@ -128,7 +140,6 @@ export class Shooting {
         // Initialize hit state
         this.targets.push({ mesh: targetMesh, body: targetBody, hit: false });
     }
-    
 
     checkCollisions() {
         // Iterate through projectiles and check for collisions with targets
