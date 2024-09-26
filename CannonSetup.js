@@ -31,22 +31,22 @@ world.gravity.set(0, -9.82, 0);
 const rooms = [
     new RoomBoundary(scene, world, { width: 4, height: 5, depth: 35, boundaryThickness: 0.1, position: { x: -11, y: 1, z: -21 }, visible: false }),
     new RoomBoundary(scene, world, { width: 15, height: 5, depth: 25, boundaryThickness: 0.1, position: { x: -7.5, y: 1, z: 10 }, visible: false }),
-    new RoomBoundary(scene, world, { width: 15, height: 5, depth: 35, boundaryThickness: 0.1, position: { x: -7.5, y: 1, z: 42 }, visible: true }),
-    new RoomBoundary(scene, world, { width: 10, height: 5, depth: 5, boundaryThickness: 0.1, position: { x: -20.5, y: 1, z: 57 }, visible: true }),
-    new RoomBoundary(scene, world, { width: 20, height: 5, depth: 15, boundaryThickness: 0.1, position: { x: -15.5, y: 1, z: 68 }, visible: true }),
+    new RoomBoundary(scene, world, { width: 15, height: 5, depth: 35, boundaryThickness: 0.1, position: { x: -7.5, y: 1, z: 42 }, visible: false }),
+    new RoomBoundary(scene, world, { width: 10, height: 5, depth: 5, boundaryThickness: 0.1, position: { x: -20.5, y: 1, z: 57 }, visible: false }),
+    new RoomBoundary(scene, world, { width: 20, height: 5, depth: 15, boundaryThickness: 0.1, position: { x: -15.5, y: 1, z: 68 }, visible: false }),
 ];
 
 // Create multiple doors
 const doors = [
-    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -11.5, y: 0.8, z: -2 }, visible: true, destination: { x: -11.6, y: -0.4, z: -5 } }),
-    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -11.5, y: 0.8, z: -4 }, visible: true, destination: { x: -11.6, y: -0.4, z: -1 } }),
-    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -7.5, y: 0.8, z: 22.5 }, visible: true, destination: { x: -7.4, y: -0.4, z: 28 } }),
-    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -7.5, y: 0.8, z: 25 }, visible: true, destination: { x: -7.4, y: -0.4, z: 21 } }),
-    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -12.5, y: 0.8, z: 75.5 }, visible: true, destination: { x: 0, y: 0, z: 0 } }),
-    new Door(scene, world, { width: 0.1, height: 2, depth: 4.5, position: { x: -14.5, y: -0.4, z: 57 }, visible: true, destination: { x: -17.5, y: -0.4, z: 57 } }),
-    new Door(scene, world, { width: 0.1, height: 2, depth: 4.5, position: { x: -16, y: -0.4, z: 57 }, visible: true, destination: { x: -12.5, y: -0.4, z: 57 } }),
-    new Door(scene, world, { width: 2, height: 4, depth: 0, position: { x: -23, y: 1, z: 59 }, visible: true, destination: { x: -23, y: 1, z: 64 } }),
-    new Door(scene, world, { width: 2, height: 4, depth: 0, position: { x: -23, y: 1, z: 61 }, visible: true, destination: { x: -23, y: 1, z: 57.5 } }),
+    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -11.5, y: 0.8, z: -2 },  destination: { x: -11.6, y: -0.4, z: -5 } }),
+    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -11.5, y: 0.8, z: -4 },  destination: { x: -11.6, y: -0.4, z: -1 } }),
+    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -7.5, y: 0.8, z: 22.5 },  destination: { x: -7.4, y: -0.4, z: 28 } }),
+    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -7.5, y: 0.8, z: 25 },  destination: { x: -7.4, y: -0.4, z: 21 } }),
+    new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -12.5, y: 0.8, z: 75.5 },  destination: {  x: -12.5, y: 0.8, z: 78.5} }),
+    new Door(scene, world, { width: 0.1, height: 2, depth: 4.5, position: { x: -14.5, y: -0.4, z: 57 },  destination: { x: -17.5, y: -0.4, z: 57 } }),
+    new Door(scene, world, { width: 0.1, height: 2, depth: 4.5, position: { x: -16, y: -0.4, z: 57 },  destination: { x: -12.5, y: -0.4, z: 57 } }),
+    new Door(scene, world, { width: 2, height: 4, depth: 0, position: { x: -23, y: 1, z: 59 },  destination: { x: -23, y: 1, z: 64 } }),
+    new Door(scene, world, { width: 2, height: 4, depth: 0, position: { x: -23, y: 1, z: 61 },  destination: { x: -23, y: 1, z: 57.5 } }),
 ];
 
 const pillars = [
