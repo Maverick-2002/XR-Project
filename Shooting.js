@@ -20,10 +20,10 @@ export class Shooting {
 
         // Predefined target positions
         this.specificPositions = [
-            new THREE.Vector3(-10, 0.5, 12),  // Target 1 position
-            new THREE.Vector3(-5, 0.5, 15),   // Target 2 position
-            new THREE.Vector3(-13, 0.5, 18), 
-            new THREE.Vector3(-8, 0.5, 10),
+            new THREE.Vector3(-10, 0.3, 12),  // Target 1 position
+            new THREE.Vector3(-5, 0.3, 15),   // Target 2 position
+            new THREE.Vector3(-13, 0.3, 18), 
+            new THREE.Vector3(-8, 0.3, 10),
         ];
 
         // Spawn targets at predefined locations
