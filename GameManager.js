@@ -37,24 +37,4 @@ export class GameManager {
             this.onStart(); // Notify when the game should start
         }
     }
-
-    resetGame() {
-        this.endScreen.style.display = 'none';
-        this.gameOver = false;
-        isGameRunning = false;
-
- 
-
-        // Call an external function to reset the game
-        if (typeof this.onReset === 'function') {
-            this.onReset(); // Notify when the game should reset
-        }
-    }
-
-    showEndScreen() {
-        this.endScreen.style.display = 'flex';
-        this.gameOver = true;
-        // Optionally stop or mute the music when the game ends
-        this.bgMusic.pause();
-    }
 }

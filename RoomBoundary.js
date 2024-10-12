@@ -55,12 +55,4 @@ export class RoomBoundary {
     // Store boundary info
     this.boundaries.push({ mesh: wallMesh, body: wallBody });
   }
-
-  // Optional: Method to move the entire room boundary
-  moveBoundaries(offset) {
-    this.boundaries.forEach(({ mesh, body }) => {
-      mesh.position.add(offset);
-      body.position.vadd(new CANNON.Vec3(offset.x, offset.y, offset.z), body.position);
-    });
-  }
 }
