@@ -89,42 +89,21 @@ scene.add(light);
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
 
-
-
-
-
-
-
-// Rotate the camera to look back 180 degrees around the Y-axis
-camera.rotation.y = Math.PI; // 180 degrees in radians
-const mouseCoordinates = new MouseCoordinates(camera, scene);
-// Assuming you have a camera object named 'camera' defined somewhere
-const movement = new Movement(cubeBody, world, camera); // Pass the world to handle jumping logic
+camera.rotation.y = Math.PI; 
+const movement = new Movement(cubeBody, world, camera);
 const maze = new Maze(scene, world, { x: -13.5, y: -2, z: 38 }, 2.5, 6);
 const assetSpawner = new AssetSpawner(scene, world);
 const gameManager = new GameManager(scene, camera, world, renderer);
 let isGameRunning = false;
-const shooting = new Shooting(scene, world, cubeBody, camera, renderer.domElement); // Pass the camera here
+const shooting = new Shooting(scene, world, cubeBody, camera, renderer.domElement); 
 
 gameManager.onStart = function() {
     isGameRunning = true; // Set the game running flag
     animate(); // Start the animation loop
 };
 
-gameManager.onReset = function() {
-    console.log("Game reset!");
-
-    // Reset player position
-    cubeBody.position.set(-11.5, -0.4, -26);
-    cubeBody.velocity.set(0, 0, 0);
-    cubeBody.angularVelocity.set(0, 0, 0);
-};
-
 function showEndScene() {
-    console.log("Game Over! You've reached the end!");
-    isGameRunning = false; // Stop the game loop
-
-    // Display end message
+    isGameRunning = false;
     const endMessage = document.createElement('div');
     endMessage.style.position = 'absolute';
     endMessage.style.width = '100%';
@@ -143,17 +122,14 @@ function animate() {
     world.step(1 / 60);
     cubeBody.angularVelocity.set(0, 0, 0);
 
-    // Handle movement
     movement.handleMovement();
 
-    // Update cube position and rotation
     cube.position.copy(cubeBody.position);
     cube.quaternion.copy(cubeBody.quaternion);
     
-    // Check if the cube has reached the end position
     if (cube.position.z > 75.5) {
-        showEndScene(); // Call the end scene function
-        return; // Exit the animate loop
+        showEndScene();
+        return;
     }
 
     // Follow the cube with the camera
