@@ -12,10 +12,18 @@ import { Shooting } from './Shooting.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 1.5, 5);
 const renderer = new THREE.WebGLRenderer();
 renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+
+const minimapRenderer = new THREE.WebGLRenderer();
+minimapRenderer.setSize(180, 180); // Set size for minimap
+minimapRenderer.domElement.style.position = 'absolute';
+minimapRenderer.domElement.style.top = '10px'; // Position it on top left corner
+minimapRenderer.domElement.style.right = '10px'; // Position it on top right corner
+document.body.appendChild(minimapRenderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
@@ -67,7 +75,7 @@ const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 const cubeMaterial = new THREE.MeshStandardMaterial({ color: '#00ff00' });
 // Set cube visible to false
 const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-cube.visible = false;  // Make the cube invisible
+cube.visible = true;  // Make the cube invisible
 cube.castShadow = true;
 scene.add(cube);
 
@@ -80,8 +88,15 @@ scene.add(light);
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
 
-// Camera setup
-camera.position.set(0, 1.5, 5);
+
+
+const minimapCamera = new THREE.OrthographicCamera(
+    -20, 20, 20, -20, 0.1, 1000 // Adjust the view size to fit the maze
+);
+minimapCamera.position.set(10, 50, 10); // High above the maze
+minimapCamera.lookAt(10, 0, 10); // Pointing downwards at the maze
+
+
 
 // Rotate the camera to look back 180 degrees around the Y-axis
 camera.rotation.y = Math.PI; // 180 degrees in radians
@@ -151,9 +166,11 @@ function animate() {
     doors.forEach(door => {
         door.passThrough(cubeBody);  // Check with the cube body
     });
-
-    // Render the scene
+    
     renderer.render(scene, camera);
+    minimapRenderer.render(scene, minimapCamera);
+ 
+
 
     shooting.updateProjectiles(); // Update projectiles
     shooting.checkCollisions(); 
