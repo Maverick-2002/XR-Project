@@ -24,6 +24,7 @@ minimapRenderer.domElement.style.position = 'absolute';
 minimapRenderer.domElement.style.top = '10px'; // Position it on top left corner
 minimapRenderer.domElement.style.right = '10px'; // Position it on top right corner
 document.body.appendChild(minimapRenderer.domElement);
+const minimapCamera = new THREE.OrthographicCamera(-20, 20, 20, -20, 0.1, 1000);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
@@ -90,11 +91,7 @@ scene.add(ambientLight);
 
 
 
-const minimapCamera = new THREE.OrthographicCamera(
-    -20, 20, 20, -20, 0.1, 1000 // Adjust the view size to fit the maze
-);
-minimapCamera.position.set(10, 50, 10); // High above the maze
-minimapCamera.lookAt(10, 0, 10); // Pointing downwards at the maze
+
 
 
 
@@ -167,6 +164,9 @@ function animate() {
         door.passThrough(cubeBody);  // Check with the cube body
     });
     
+    minimapCamera.position.set(cube.position.x, cube.position.y + 5, cube.position.z); // Zoomed in position
+    minimapCamera.lookAt(cube.position);
+
     renderer.render(scene, camera);
     minimapRenderer.render(scene, minimapCamera);
  
