@@ -1,13 +1,13 @@
 import * as THREE from 'three';
-import * as CANNON from 'cannon-es'; // Import Cannon.js
+import * as CANNON from 'cannon-es'; 
 
 export class Maze {
   constructor(scene, world, position = { x: 0, y: 0, z: 0 }, wallSize = 2.5, wallHeight = 5) {
     this.scene = scene;
-    this.world = world; // Pass in the Cannon.js world
-    this.position = position; // Position where the maze will start
-    this.wallSize = wallSize; // Size of each wall unit (scaled down)
-    this.wallHeight = wallHeight; // Height of the walls
+    this.world = world; 
+    this.position = position; 
+    this.wallSize = wallSize;
+    this.wallHeight = wallHeight; 
     this.mazeData = [
       [1, 1, 1, 1, 1, 0],
       [1, 1, 0, 0, 0, 0],
@@ -15,29 +15,27 @@ export class Maze {
       [1, 0, 1, 0, 0, 0],
       [0, 0, 0, 1, 0, 1],
       [1, 1, 0, 1, 1, 1]
-    ]; // 6x6 maze layout
+    ]; 
 
-    // Load texture
     this.textureLoader = new THREE.TextureLoader();
     this.wallTexture = this.textureLoader.load('https://cdn.glitch.global/9840aa6a-2e73-4088-b83c-d68a4642d7be/Screenshot%202024-09-25%20134211.png?v=1727251984445', (texture) => {
-      // Set texture repeat and wrap
+
       texture.wrapS = THREE.RepeatWrapping;  // Wrap horizontally
       texture.wrapT = THREE.RepeatWrapping;  // Wrap vertically
-      texture.repeat.set(this.wallSize / 2, this.wallHeight / 2); // Adjust repeat to cover the wall size
+      texture.repeat.set(this.wallSize / 2, this.wallHeight / 2); 
     });
 
     this.createMaze();
   }
 
   createMaze() {
-    // Create Three.js wall geometry and material with texture
+  
     const wallGeometry = new THREE.BoxGeometry(this.wallSize, this.wallHeight, this.wallSize);
-    const wallMaterial = new THREE.MeshStandardMaterial({ map: this.wallTexture }); // Apply the texture
+    const wallMaterial = new THREE.MeshStandardMaterial({ map: this.wallTexture }); 
 
     for (let row = 0; row < this.mazeData.length; row++) {
       for (let col = 0; col < this.mazeData[row].length; col++) {
         if (this.mazeData[row][col] === 1) {
-          // Create the Three.js wall mesh
           const wall = new THREE.Mesh(wallGeometry, wallMaterial);
           wall.position.set(
             col * this.wallSize + this.position.x,
@@ -46,17 +44,15 @@ export class Maze {
           );
           wall.castShadow = true;
           this.scene.add(wall);
-
-          // Create the corresponding Cannon.js body for the wall
           const wallShape = new CANNON.Box(new CANNON.Vec3(this.wallSize / 2, this.wallHeight / 2, this.wallSize / 2));
-          const wallBody = new CANNON.Body({ mass: 0 }); // Static body (mass 0)
+          const wallBody = new CANNON.Body({ mass: 0 }); 
           wallBody.addShape(wallShape);
           wallBody.position.set(
             col * this.wallSize + this.position.x,
             this.wallHeight / 2 + this.position.y,
             row * this.wallSize + this.position.z
           );
-          this.world.addBody(wallBody); // Add wall to Cannon.js world
+          this.world.addBody(wallBody); 
         }
       }
     }

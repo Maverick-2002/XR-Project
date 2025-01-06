@@ -1,5 +1,5 @@
 import * as CANNON from 'cannon-es';
-import { Vector3 } from 'three'; // Import Vector3 from Three.js
+import { Vector3 } from 'three'; 
 
 export class Movement {
   constructor(cubeBody, world, camera) {
@@ -17,11 +17,11 @@ export class Movement {
     this.isJumping = false;
     this.moveSpeed = 15;
 
-    // Event listeners for keydown and keyup
+  
     window.addEventListener('keydown', (event) => this.onKeyDown(event));
     window.addEventListener('keyup', (event) => this.onKeyUp(event));
 
-    // Detect when cube is on the ground
+  
     this.world.addEventListener('postStep', () => {
       this.checkIfGrounded();
     });
@@ -41,14 +41,14 @@ export class Movement {
       case 'KeyS':
         this.keys.s.pressed = true;
         break;
-      case 'ArrowLeft': // Log cube position when left arrow key is pressed
+      case 'ArrowLeft': 
         console.log('Cube position:', this.cubeBody.position);
         this.keys.left.pressed = true;
         break;
-      case 'Space': // Jump
+      case 'Space': 
         if (!this.isJumping) {
           this.isJumping = true;
-          this.cubeBody.velocity.y = 8; // Apply vertical velocity for jump
+          this.cubeBody.velocity.y = 8; 
         }
         break;
     }
@@ -80,38 +80,37 @@ export class Movement {
   handleMovement() {
     const velocity = this.cubeBody.velocity;
 
-    // Get the camera's forward direction as a normalized Vector3
+    
     const forward = new Vector3();
     this.camera.getWorldDirection(forward);
     forward.normalize();
 
-    // Calculate the desired movement direction based on WASD keys and camera forward
+  
     const direction = new Vector3();
     if (this.keys.d.pressed) {
-      direction.crossVectors(forward, this.camera.up); // Move right relative to camera (original)
+      direction.crossVectors(forward, this.camera.up); 
     } else if (this.keys.a.pressed) {
-      direction.crossVectors(forward, this.camera.up).negate(); // Move left relative to camera (invert)
+      direction.crossVectors(forward, this.camera.up).negate(); 
     }
 
     if (this.keys.w.pressed) {
-      direction.copy(forward); // Move forward relative to camera
+      direction.copy(forward); 
     } else if (this.keys.s.pressed) {
-      direction.copy(forward).negate(); // Move backward relative to camera
+      direction.copy(forward).negate();
     }
 
-    // Apply movement based on direction and speed
+
     velocity.x = direction.x * this.moveSpeed;
     velocity.z = direction.z * this.moveSpeed;
   }
 
-  // Check if the player is grounded (same as before)
-  checkIfGrounded() {
-    const groundLevel = 0; // Adjust according to the actual ground level in your scene
-    const velocityThreshold = 0.1; // Threshold to consider the player grounded
 
-    // Consider grounded if near ground level and vertical velocity is close to zero
+  checkIfGrounded() {
+    const groundLevel = 0; 
+    const velocityThreshold = 0.1;
+
     if (this.cubeBody.position.y <= groundLevel + 0.5 && Math.abs(this.cubeBody.velocity.y) < velocityThreshold) {
-      this.isJumping = false; // Reset jump when grounded
+      this.isJumping = false;
     }
   }
 }

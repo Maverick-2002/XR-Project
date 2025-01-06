@@ -19,10 +19,10 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const minimapRenderer = new THREE.WebGLRenderer();
-minimapRenderer.setSize(180, 180); // Set size for minimap
+minimapRenderer.setSize(180, 180); 
 minimapRenderer.domElement.style.position = 'absolute';
-minimapRenderer.domElement.style.top = '10px'; // Position it on top left corner
-minimapRenderer.domElement.style.right = '10px'; // Position it on top right corner
+minimapRenderer.domElement.style.top = '10px'; 
+minimapRenderer.domElement.style.right = '10px'; 
 document.body.appendChild(minimapRenderer.domElement);
 const minimapCamera = new THREE.OrthographicCamera(-20, 20, 20, -20, 0.1, 1000);
 
@@ -31,7 +31,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 const world = new CANNON.World();
 world.gravity.set(0, -9.82, 0);
 
-// Create room boundaries
+
 const rooms = [
     new RoomBoundary(scene, world, { width: 4, height: 5, depth: 35, boundaryThickness: 0.1, position: { x: -11, y: 1, z: -21 }, visible: false }),
     new RoomBoundary(scene, world, { width: 15, height: 5, depth: 25, boundaryThickness: 0.1, position: { x: -7.5, y: 1, z: 10 }, visible: false }),
@@ -40,7 +40,7 @@ const rooms = [
     new RoomBoundary(scene, world, { width: 20, height: 5, depth: 15, boundaryThickness: 0.1, position: { x: -15.5, y: 1, z: 68 }, visible: false }),
 ];
 
-// Create multiple doors
+
 const doors = [
     new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -11.5, y: 0.8, z: -2 }, destination: { x: -11.6, y: -0.4, z: -5 } }),
     new Door(scene, world, { width: 2.5, height: 3, depth: 0.1, position: { x: -11.5, y: 0.8, z: -4 }, destination: { x: -11.6, y: -0.4, z: -1 } }),
@@ -62,11 +62,11 @@ const pillars = [
     new RoomBoundary(scene, world, { width: 1, height: 6, depth: 1, boundaryThickness: 0.1, position: { x: -4.4, y: 1.5, z: 49 }, visible: false }),
 ];
 
-// Create the player cube
+
 const cubeBody = new CANNON.Body({
     mass: 1,
     position: new CANNON.Vec3(-11.5, -0.4, -26),
-    fixedRotation: true // Prevents rotation
+    fixedRotation: true 
 });
 const cubeShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5));
 cubeBody.addShape(cubeShape);
@@ -74,13 +74,12 @@ world.addBody(cubeBody);
 
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 const cubeMaterial = new THREE.MeshStandardMaterial({ color: '#00ff00' });
-// Set cube visible to false
 const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-cube.visible = true;  // Make the cube invisible
+cube.visible = true;  
 cube.castShadow = true;
 scene.add(cube);
 
-// Lighting
+
 const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(5, 20, 5);
 light.castShadow = true;
@@ -98,8 +97,8 @@ let isGameRunning = false;
 const shooting = new Shooting(scene, world, cubeBody, camera, renderer.domElement); 
 
 gameManager.onStart = function() {
-    isGameRunning = true; // Set the game running flag
-    animate(); // Start the animation loop
+    isGameRunning = true; 
+    animate(); 
 };
 
 function showEndScene() {
@@ -116,7 +115,7 @@ function showEndScene() {
     document.body.appendChild(endMessage);
 }
 
-// Animation loop
+
 function animate() {
     requestAnimationFrame(animate);
     world.step(1 / 60);
@@ -132,15 +131,15 @@ function animate() {
         return;
     }
 
-    // Follow the cube with the camera
+
     camera.position.set(cube.position.x, cube.position.y + 1.5, cube.position.z);
 
-    // Check if the player is near any door to pass through
+
     doors.forEach(door => {
-        door.passThrough(cubeBody);  // Check with the cube body
+        door.passThrough(cubeBody); 
     });
     
-    minimapCamera.position.set(cube.position.x, cube.position.y + 5, cube.position.z); // Zoomed in position
+    minimapCamera.position.set(cube.position.x, cube.position.y + 5, cube.position.z); 
     minimapCamera.lookAt(cube.position);
 
     renderer.render(scene, camera);
@@ -148,18 +147,16 @@ function animate() {
  
 
 
-    shooting.updateProjectiles(); // Update projectiles
+    shooting.updateProjectiles(); 
     shooting.checkCollisions(); 
 }
 
-// Start the game when ready
 document.addEventListener('keydown', (event) => {
     if (event.code === 'Space' && !isGameRunning) {
-        gameManager.start(); // Call start method
+        gameManager.start();
     }
 });
 
-// Handle window resize
 window.addEventListener('resize', () => {
     const width = window.innerWidth;
     const height = window.innerHeight;
